@@ -3,13 +3,24 @@
 
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
+
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 
   outputs = inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
+      imports = [
+        inputs.treefmt-nix.flakeModule
+      ];
       systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" ];
       perSystem = { pkgs, ... }: {
+        treefmt.programs = {
+          nixpkgs-fmt.enable = true;
+          clang-format.enable = true;
+        };
+
         devShells.default =
           let
             avrlibc = pkgs.pkgsCross.avr.libcCross;
@@ -29,7 +40,6 @@
 
             packages = with pkgs; [
               nixd
-              nixpkgs-fmt
 
               clang-tools
               dfu-programmer
@@ -53,6 +63,36 @@
             shellHook = ''
               unset NIX_CFLAGS_COMPILE_FOR_TARGET
             '';
+          };
+
+        apps =
+          let
+            flash = pkgs.writeShellApplication {
+              name = "flash.sh";
+
+              runtimeInputs = [ ];
+
+              text = ''
+
+            '';
+            };
+
+            update = pkgs.writeShellApplication {
+              name = "update.sh";
+
+              runtimeInputs = [ ];
+
+              text = ''
+                git fetch upstream
+                git rev-list --left-right --count HEAD...upstream/master
+                git rebase upstream/master
+              '';
+            };
+          in
+          {
+            default.program = "${flash}/bin/flash.sh";
+
+            update.program = "${update}/bin/update.sh";
           };
       };
     };
