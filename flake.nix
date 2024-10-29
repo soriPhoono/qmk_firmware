@@ -64,8 +64,15 @@
               runtimeInputs = [ ];
 
               text = ''
+                # if there are uncommited changes, exit after alerting user
+                if ! git diff-index --quiet HEAD --; then
+                  echo "There are uncommited changes. Aborting."
+                  exit 1
+                fi
 
-            '';
+                qmk compile
+                qmk flash
+              '';
             };
 
             update = pkgs.writeShellApplication {
@@ -81,7 +88,7 @@
             };
           in
           {
-            default.program = "${flash}/bin/flash.sh";
+            flash.program = "${flash}/bin/flash.sh";
 
             update.program = "${update}/bin/update.sh";
           };
