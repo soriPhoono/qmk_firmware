@@ -30,6 +30,7 @@
 
             packages = with pkgs; [
               nixd
+              nixpkgs-fmt
 
               clang-tools
               dfu-programmer

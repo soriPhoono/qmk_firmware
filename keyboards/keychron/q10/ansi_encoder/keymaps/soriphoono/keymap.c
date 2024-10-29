@@ -77,27 +77,27 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
         uint8_t layer = get_highest_layer(layer_state);
 
         for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
-            for (uint8_t col = 0; column < MATRIX_COLS; ++column) {
+            for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
                 uint8_t index = g_led_config.matrix_co[row][col];
 
                 if (index >= led_min && index < led_max && index != NO_LED && keymap_key_to_keycode(layer, (keypos_t){col, row}) > KC_CAPS) {
-                    rgb_matrix_set_color(index, RGB_RED);
+                    rgb_matrix_set_color(index, RGB_RED);
                 }
             }
         }
 
-for (uint8_t i = led_min; i < led_max; i++) {
-        switch (layer) {
-            case 2:
-                rgb_matrix_set_color(i, RGB_GREEN);
-                break;
-            case 1:
-                rgb_matrix_set_color(i, RGB_CYAN);
-                break;
-            default:
-                break;
+        for (uint8_t i = led_min; i < led_max; i++) {
+            switch (layer) {
+                case 2:
+                    rgb_matrix_set_color(i, RGB_GREEN);
+                    break;
+                case 1:
+                    rgb_matrix_set_color(i, RGB_CYAN);
+                    break;
+                default:
+                    break;
+            }
         }
-    }
     }
 
     return false;
