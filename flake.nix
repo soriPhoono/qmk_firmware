@@ -81,9 +81,10 @@
               runtimeInputs = [ ];
 
               text = ''
+                git checkout main
                 git fetch upstream
-                git rev-list --left-right --count HEAD...upstream/master
-                git rebase upstream/master
+                git pull upstream master
+                git push origin main
               '';
             };
           in
