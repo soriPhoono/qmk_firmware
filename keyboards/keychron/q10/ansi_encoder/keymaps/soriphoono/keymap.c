@@ -77,6 +77,10 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     if (rgb_matrix_is_enabled()) {
         // Set Background to cyan
         rgb_matrix_set_color_all(RGB_CYAN);
+
+        if (host_keyboard_led_state().caps_lock) {
+            rgb_matrix_set_color(CAPS_LOCK_LED_INDEX, RGB_RED);
+        }
     }
 
     return false;
