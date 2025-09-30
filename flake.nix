@@ -29,9 +29,6 @@
             name = "qmk-firmware";
 
             packages = with pkgs; [
-              nixd
-              nixpkgs-fmt
-
               clang-tools
               dfu-programmer
               dfu-util
